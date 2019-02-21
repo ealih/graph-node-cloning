@@ -1,6 +1,6 @@
 # Graph Node Cloning
 
-This is a solution for assignment (check Assignment.md).
+This is a solution for assignment (check [Assignment.md](https://github.com/ealih/graph-node-cloning/blob/master/Assignment.md)).
 
 ## Running the precompiled app
 
