@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+}
+
+group 'app'
+version '1.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.1.4'
+
+}
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'app.Main',
+        )
+    }
+}
+
+task fatJar(type: Jar) {
+    
+    manifest.from jar.manifest
+    classifier = 'all'
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+
+    archiveName = 'app.jar'
+}
+
+task copyJar() {
+    copy {
+        from 'build/libs/app.jar'
+        into '.'
+    }
+}
+
+task buildJar {
+    dependsOn 'fatJar'
+    dependsOn 'copyJar'
+    tasks.findByName('copyJar').mustRunAfter 'fatJar'
+}
